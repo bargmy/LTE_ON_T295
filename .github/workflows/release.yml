@@ -1,0 +1,50 @@
+name: Build and release Magisk module
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (for example v2); leave blank to use module.prop version'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: magisk-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Magisk ZIP
+        run: python3 scripts/build_module.py
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$REF_TYPE" == tag ]]; then
+            tag="$REF_NAME"
+          else
+            tag="${REQUESTED_TAG:-$(sed -n 's/^version=//p' module.prop)}"
+          fi
+          if [[ ! "$tag" =~ ^v[0-9][A-Za-z0-9._-]*$ ]]; then
+            echo 'Release tag must start with v and a number.' >&2
+            exit 1
+          fi
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --target "$GITHUB_SHA" --title "LTE_ON_T295 $tag" --generate-notes
+          fi
+          gh release upload "$tag" dist/*.zip --clobber

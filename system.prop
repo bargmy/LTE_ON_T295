@@ -8,3 +8,6 @@ ro.telephony.iwlan_operation_mode=legacy
 persist.radio.multisim.config=ssss
 persist.vendor.radio.custom_ecc=1
 persist.sys.cnd.wpath.supported=true
+
+# Start CS voice via the single-session VoiceMMode1 PCM/mixer mapping.
+vendor.audio.feature.multi_voice_session.enable=false

@@ -17,7 +17,7 @@ detail() {
 
 print_modname() {
   ui_print "****************************************"
-  ui_print "            LTE_ON_LOS   v1"
+  ui_print "            LTE_ON_LOS   v2"
   ui_print "       Get cell on ur T295!"
   ui_print "      on LineageOS 22.2 (A15)"
   ui_print "****************************************"
@@ -65,6 +65,8 @@ on_install() {
     system.prop \
     system/vendor/etc/vintf/manifest/t295_radio_manifest.xml \
     system/vendor/etc/data/netmgr_config.xml \
+    system/vendor/etc/mixer_paths_mtp.xml \
+    system/vendor/etc/audio_platform_info_intcodec.xml \
     system/vendor/lib64/libsec-ril.so \
     system/product/overlay/T295SimSettingsOverlay.apk ; do
     if [ -f "$MODPATH/$_f" ]; then
