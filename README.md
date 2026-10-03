@@ -5,7 +5,5 @@ Get simcard working on your Galaxy Tab A 8.0 2019 LineageOS 22.2!
 - Calls
 - Internet
 - SMS
-
-# Doesnt Work
 - Call audio
 - SIMCARD settings
