@@ -1,0 +1,7 @@
+# Magisk module payload: never let git rewrite line endings.
+#
+# Android executes service.sh and customize.sh directly. If either lands with
+# CRLF endings the shebang becomes "/system/bin/sh\r" and the installer dies
+# with "bad interpreter", while update-binary fails to unpack the zip.
+# core.autocrlf=true on Windows would otherwise convert these on checkout.
+* -text

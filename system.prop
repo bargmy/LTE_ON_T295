@@ -1,0 +1,10 @@
+# Enable RIL and Telephony
+ro.radio.noril=0
+ro.telephony.default_network=9
+telephony.lteOnCdmaDevice=0
+ro.telephony.call_ring.multiple=false
+ro.vendor.multisim.simslotcount=1
+ro.telephony.iwlan_operation_mode=legacy
+persist.radio.multisim.config=ssss
+persist.vendor.radio.custom_ecc=1
+persist.sys.cnd.wpath.supported=true

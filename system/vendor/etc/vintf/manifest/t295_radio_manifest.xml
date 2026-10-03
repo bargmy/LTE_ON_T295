@@ -1,0 +1,70 @@
+<manifest version="1.0" type="device">
+    <!--
+      LEGACY HIDL radio path test.
+
+      v6/v7 declared the split AIDL per-domain radio HALs
+      (android.hardware.radio.{sim,voice,data,network,modem,ims,messaging}/slot1).
+      servicemanager then reported those names as "Found in device VINTF manifest",
+      but nothing ever registered them, because this rild does not implement them:
+      RILC logs only
+          registerService: starting android::hardware::radio::V1_4::IRadio slot1
+          registerService: V1_4 isn't registered
+      plus the Samsung HIDL interfaces, which do register.
+
+      Hypothesis: declaring the AIDL names pushed Android 15 telephony onto the AIDL
+      path, so it never fell back to the legacy HIDL IRadio that rild actually has.
+
+      This fragment therefore:
+        - declares NO AIDL radio HALs
+        - declares the HIDL rild really tries to register:
+              android.hardware.radio@1.4::IRadio/slot1
+              android.hardware.radio@1.2::ISap/slot1
+        - keeps the three Samsung vendor HIDL services (ISehRadio / ISehBridge /
+          ISehChannel), copied verbatim from the T295 vendor manifest
+        - overrides nothing except android.hardware.radio itself
+
+      android.hardware.radio is overridden because the stock vendor manifest
+      declares that HAL with no interface/fqname, which cannot satisfy a
+      slot1 lookup. No other HAL is touched.
+    -->
+
+    <hal format="hidl" override="true">
+        <name>android.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.4::IRadio/slot1</fqname>
+        <fqname>@1.2::ISap/slot1</fqname>
+    </hal>
+
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <version>2.1</version>
+        <interface>
+            <name>ISehRadio</name>
+            <instance>slot1</instance>
+        </interface>
+        <fqname>@2.1::ISehRadio/slot1</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio.bridge</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISehBridge</name>
+            <instance>slot1</instance>
+        </interface>
+        <fqname>@2.0::ISehBridge/slot1</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio.channel</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISehChannel</name>
+            <instance>epdgd</instance>
+            <instance>imsd</instance>
+        </interface>
+        <fqname>@2.0::ISehChannel/epdgd</fqname>
+        <fqname>@2.0::ISehChannel/imsd</fqname>
+    </hal>
+</manifest>

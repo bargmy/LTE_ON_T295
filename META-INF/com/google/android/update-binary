@@ -1,0 +1,10 @@
+#!/sbin/sh
+umask 022
+O32=`ps | grep zygote | grep -v grep | tr -s ' ' | cut -d ' ' -f 9`
+[ -z "$O32" ] && O32=`ps -A | grep zygote | grep -v grep | tr -s ' ' | cut -d ' ' -f 9`
+[ -z "$O32" ] && BB=/sbin/busybox || BB=/system/bin/sh
+ZIPFILE=$3
+MODPATH=/data/adb/modules/t295_lte_enabler
+mkdir -p $MODPATH
+unzip -o "$ZIPFILE" -d $MODPATH >&2
+exec /data/adb/magisk/busybox sh $MODPATH/customize.sh

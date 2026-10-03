@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Additive telephony feature declarations for the SM-T295 RIL on LineageOS.
+
+     The T295 vendor's own permissions files only declare:
+         android.hardware.telephony
+         android.hardware.telephony.gsm
+         android.hardware.telephony.ims
+     which leaves the framework refusing the radio services it can now actually
+     reach:
+         E/RILJ: Service VOICE is available, but feature
+                android.hardware.telephony.calling is not declared
+         E/RILJ: Service DATA is available, but feature
+                android.hardware.telephony.data is not declared
+
+     This file only ADDS the three missing features. It overrides nothing, so it
+     cannot shadow any LineageOS or Samsung declaration.
+-->
+<permissions>
+    <feature name="android.hardware.telephony.calling" />
+    <feature name="android.hardware.telephony.data" />
+    <feature name="android.hardware.telephony.messaging" />
+</permissions>

@@ -1,0 +1,6 @@
+id=t295_lte_enabler
+name=LTE_ON_LOS
+version=v1
+versionCode=1
+author=bargmy
+description=internet works, calls work ( no audio in/out ), sms works
