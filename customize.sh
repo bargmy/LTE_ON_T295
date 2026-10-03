@@ -66,7 +66,7 @@ on_install() {
     system/vendor/etc/vintf/manifest/t295_radio_manifest.xml \
     system/vendor/etc/data/netmgr_config.xml \
     system/vendor/lib64/libsec-ril.so \
-    system/system_ext/overlay/T295SimSettingsOverlay.apk ; do
+    system/product/overlay/T295SimSettingsOverlay.apk ; do
     if [ -f "$MODPATH/$_f" ]; then
       detail "OK   $_f"
     else
